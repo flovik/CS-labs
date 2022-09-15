@@ -29,6 +29,8 @@ namespace CaesarCipher.Ciphers
             return new string(message);
         }
 
+        //generate a new alphabet from adding permutationKey and then adding the rest letters of the alphabet
+        //apart from added letters
         private string ChangeAlphabet(string permutationKey)
         {
             var secondAlphabet = new StringBuilder(permutationKey);

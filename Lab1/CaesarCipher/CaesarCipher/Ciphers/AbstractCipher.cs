@@ -22,8 +22,8 @@ namespace CaesarCipher.Ciphers
             char replacedChar;
             if (char.IsLower(character))
             {
-                var index = alphabet.IndexOf(char.ToUpper(character));
-                replacedChar = char.ToLower(alphabet[(index + SubstitutionKey) % alphabet.Length]);
+                var index = alphabet.IndexOf(char.ToUpper(character)); //take index of character in the alphabet
+                replacedChar = char.ToLower(alphabet[(index + SubstitutionKey) % alphabet.Length]); //apply substitution rule
             }
             else replacedChar = alphabet[(alphabet.IndexOf(character)+ SubstitutionKey) % alphabet.Length];
 

@@ -12,7 +12,7 @@ namespace CaesarCipher.Ciphers
         public CaesarCipherWithPermutation(int substitutionKey, string permutationKey)
         {
             SubstitutionKey = substitutionKey;
-            alphabet = alphabet.Insert(0, permutationKey);
+            alphabet = ChangeAlphabet(permutationKey);
         }
 
         public string encryptMessage(char[] message)
@@ -21,9 +21,23 @@ namespace CaesarCipher.Ciphers
             return new string(message);
         }
 
-        public string decryptMessage(char[] encryptedMessage)
+        public string decryptMessage(char[] message)
         {
-            throw new NotImplementedException();
+            SubstitutionKey = 26 - SubstitutionKey; //change substitution key to make a full circle
+            message = ReplaceText(message);
+            SubstitutionKey = 26 - SubstitutionKey; //restore original value of key
+            return new string(message);
+        }
+
+        private string ChangeAlphabet(string permutationKey)
+        {
+            var secondAlphabet = new StringBuilder(permutationKey);
+            foreach (var letter in alphabet)
+            {
+                if (!permutationKey.Contains(letter)) secondAlphabet.Append(letter);
+            }
+
+            return secondAlphabet.ToString();
         }
     }
 

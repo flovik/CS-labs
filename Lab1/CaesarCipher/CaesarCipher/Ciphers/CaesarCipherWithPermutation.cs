@@ -7,37 +7,25 @@ using System.Threading.Tasks;
 
 namespace CaesarCipher.Ciphers
 {
-    //public class CaesarCipherWithPermutation : AbstractCipher, ICypher
-    //{
-    //    private readonly string PermutationKey;
+    public class CaesarCipherWithPermutation : AbstractCipher, ICypher
+    {
+        public CaesarCipherWithPermutation(int substitutionKey, string permutationKey)
+        {
+            SubstitutionKey = substitutionKey;
+            alphabet = alphabet.Insert(0, permutationKey);
+        }
 
-    //    public CaesarCipherWithPermutation(int substitutionKey, string permutationKey)
-    //    {
-    //        SubstitutionKey = substitutionKey;
-    //        PermutationKey = permutationKey;
-    //    }
+        public string encryptMessage(char[] message)
+        {
+            message = ReplaceText(message);
+            return new string(message);
+        }
 
-    //    public string encryptMessage(char[] message)
-    //    {
-    //        var alphabet = Constants.alphabet;
-    //        var size = Constants.size;
-
-    //        for (int i = 0; i < message.Length; i++)
-    //        {
-    //            //skip whitespaces, commas, dots, etc.
-    //            if (SkipJunk(message[i]))
-    //                continue;
-
+        public string decryptMessage(char[] encryptedMessage)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 
-    //        }
-    //        return "";
-    //    }
-
-    //    public string decryptMessage(char[] encryptedMessage)
-    //    {
-    //        Console.WriteLine(encryptedMessage);
-    //        return "";
-    //    }
-    //}
 }

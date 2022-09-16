@@ -30,7 +30,7 @@ namespace CaesarCipher.Ciphers
                 if (!char.IsLetter(letter)) continue;
                 //if already in set of used letters skip it
                 if (usedLetters.ContainsKey(letter)) continue;
-
+                
                 switch (letter)
                 {
                     //check in case for j or i
@@ -86,7 +86,7 @@ namespace CaesarCipher.Ciphers
 
             //split string into chunks of two characters
             var pairs = formattedText.ToString().TakeEvery(2);
-            var encoded = ReplaceLetters(pairs);
+            var encoded = ReplaceLetters(pairs, 0);
 
             //X is used as a substitution to fill the next 
             //message = ReplaceText(message);
@@ -96,11 +96,12 @@ namespace CaesarCipher.Ciphers
 
         public string decryptMessage(char[] message)
         {
-            //SubstitutionKey = 26 - SubstitutionKey; //change substitution key to make a full circle
-            //message = ReplaceText(message);
-            //SubstitutionKey = 26 - SubstitutionKey; //restore original value of key
-            //return new string(message);
-            return "";
+            //split string into chunks of two characters
+            var pairs = new string(message).TakeEvery(2);
+            //we will need to execute 4 more iterations on SameRow and SameColumn
+            var encoded = ReplaceLetters(pairs, 3);
+
+            return string.Join("", encoded);
         }
 
         private static string RemoveSpecialCharacters(string input)
@@ -115,7 +116,7 @@ namespace CaesarCipher.Ciphers
             return r.Replace(input, String.Empty);
         }
 
-        private List<string> ReplaceLetters(IEnumerable<string> pairs)
+        private List<string> ReplaceLetters(IEnumerable<string> pairs, int iterations)
         {
             var result = new List<string>();
             foreach (var pair in pairs)
@@ -123,9 +124,25 @@ namespace CaesarCipher.Ciphers
                 //take coordinates of each letter
                 (int i, int j) coordinatesA = usedLetters[pair[0]];
                 (int i, int j) coordinatesB = usedLetters[pair[1]];
-                
-                if (coordinatesA.i == coordinatesB.i) result.Add(SameRow(coordinatesA, coordinatesB));
-                else if (coordinatesA.j == coordinatesB.j) result.Add(SameColumn(coordinatesA, coordinatesB));
+
+                if (coordinatesA.i == coordinatesB.i)
+                {
+                    //change coordinates in case we have more iterations to decrypt
+                    coordinatesA = new(coordinatesA.i, (coordinatesA.j + iterations) % 5);
+                    coordinatesB = new (coordinatesB.i, (coordinatesB.j + iterations) % 5);
+                    //coordinatesA.j += iterations % 5;
+                    //coordinatesB.j += iterations % 5;
+                    result.Add(SameRow(coordinatesA, coordinatesB));
+                }
+                else if (coordinatesA.j == coordinatesB.j)
+                {
+
+                    coordinatesA = new ((coordinatesA.i + iterations) % 5, coordinatesA.j);
+                    coordinatesB = new((coordinatesB.i + iterations) % 5, coordinatesB.j);
+                    //coordinatesA.i += iterations % 5;
+                    //coordinatesB.i += iterations % 5;
+                    result.Add(SameColumn(coordinatesA, coordinatesB));
+                }
                 else result.Add(Rectangle(coordinatesA, coordinatesB));
             }
 

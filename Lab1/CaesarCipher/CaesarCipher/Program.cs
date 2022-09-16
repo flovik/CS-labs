@@ -16,10 +16,12 @@ var text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab1\CaesarCipher\C
 //string decryptedMessage = caesarCipherWithPermutation.decryptMessage(text);
 //Console.WriteLine(decryptedMessage);
 
-var newText = "Hello world";
+var newText = "balloon";
 var playfair = new PlayfairCipher(newText);
 playfair.PrintMatrix();
 
 var encoded = playfair.encryptMessage(text);
 Console.WriteLine(encoded);
+var decoded = playfair.decryptMessage(encoded.ToCharArray());
+Console.WriteLine(decoded);
 //var vigenere = new VigenereChiper("", "");

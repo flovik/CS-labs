@@ -27,6 +27,8 @@ var text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab1\CaesarCipher\C
 
 var keyword = "LEMON";
 var vigenere = new VigenereChiper(keyword);
-var encoded = vigenere.encryptMessage(text);
-
 vigenere.PrintMatrix();
+var encoded = vigenere.encryptMessage(text);
+Console.WriteLine(encoded);
+var decoded = vigenere.decryptMessage(encoded.ToCharArray());
+Console.WriteLine(decoded);

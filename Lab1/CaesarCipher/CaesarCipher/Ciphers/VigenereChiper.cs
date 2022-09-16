@@ -63,13 +63,13 @@ namespace CaesarCipher.Ciphers
         {
             var input = TextManipulation.RemoveSpecialCharacters((new string(message)).ToUpper());
             matchKeyword(input);
-            string result = GenerateEncryptedMessage(input);
+            var result = GenerateEncryptedMessage(input);
             return result;
         }
 
         public string decryptMessage(char[] encryptedMessage)
         {
-            throw new NotImplementedException();
+            return GenerateDecryptedMessage(new string(encryptedMessage));
         }
 
         private void matchKeyword(string input)
@@ -98,6 +98,30 @@ namespace CaesarCipher.Ciphers
                 int indexRow = letterIndexes[keywordLetter] - 1;
                 int indexColumn = letterIndexes[messageLetter] - 1;
                 word[i] = vigenereTable[indexRow, indexColumn];
+            }
+
+            return word.ToString();
+        }
+
+        private string GenerateDecryptedMessage(string input)
+        {
+            var word = new StringBuilder(input);
+            //match letters of Keyword with plaintext to generate encrypted message
+            for (int i = 0; i < word.Length; i++)
+            {
+                var keywordLetter = KeywordMessage[i];
+                var encryptedMessageLetter = word[i];
+
+                int indexRow = letterIndexes[keywordLetter] - 1;
+                int indexColumn = 0;
+                for (int j = 0; j < vigenereTable.GetLength(0); j++)
+                {
+                    if (vigenereTable[indexRow, j] != encryptedMessageLetter) continue;
+                    indexColumn = j;
+                    break;
+                }
+
+                word[i] = vigenereTable[0, indexColumn];
             }
 
             return word.ToString();

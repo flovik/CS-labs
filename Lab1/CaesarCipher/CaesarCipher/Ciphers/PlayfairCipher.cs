@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CaesarCipher.Extensions;
 using CaesarCipher.Interfaces;
+using CaesarCipher.Utils;
 
 namespace CaesarCipher.Ciphers
 {
@@ -63,7 +64,7 @@ namespace CaesarCipher.Ciphers
 
         public string encryptMessage(char[] message)
         {
-            var splitAndConcat = RemoveSpecialCharacters(new string(message));
+            var splitAndConcat = TextManipulation.RemoveSpecialCharacters(new string(message));
             var formattedText = new StringBuilder(splitAndConcat.ToUpper());
 
             int i = 1;
@@ -102,18 +103,6 @@ namespace CaesarCipher.Ciphers
             var encoded = ReplaceLetters(pairs, 3);
 
             return string.Join("", encoded);
-        }
-
-        private static string RemoveSpecialCharacters(string input)
-        {
-            //removes only special characters, leaves whitespaces
-            //var r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", 
-            //RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-
-            //that one removes whitespaces and special characters
-            var r = new Regex("(?:[^a-z0-9]|(?<=['\"])s)", 
-                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-            return r.Replace(input, String.Empty);
         }
 
         private List<string> ReplaceLetters(IEnumerable<string> pairs, int iterations)

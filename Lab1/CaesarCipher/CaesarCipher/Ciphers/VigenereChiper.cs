@@ -4,31 +4,103 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CaesarCipher.Utils;
 
 namespace CaesarCipher.Ciphers
 {
-    //public class VigenereChiper : ICypher
-    //{
-    //    private readonly string SubstitutionKey;
-    //    private readonly string PermutationKey;
+    public class VigenereChiper : ICypher
+    {
+        private StringBuilder alphabet = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        private Dictionary<char, int> letterIndexes = new Dictionary<char, int>();
+        private char[,] vigenereTable = new char[26, 26];
+        private string Keyword;
+        private string KeywordMessage = string.Empty;
+        public VigenereChiper(string keyword)
+        {
+            Keyword = keyword;
+            InitDictionary();
+            InitTable();
+        }
 
-    //    public VigenereChiper(string substitutionKey, string permutationKey)
-    //    {
-    //        SubstitutionKey = substitutionKey;
-    //        PermutationKey = permutationKey;
-    //    }
+        private void InitTable()
+        {
+            for (int i = 0; i < 26; i++)
+            {
+                for (int j = 0; j < 26; j++)
+                {
+                    vigenereTable[i, j] = alphabet[j];
+                }
 
-    //    public string encryptMessage(string message)
-    //    {
-    //        // The implementation of Cipher A.
-    //        return "";
-    //    }
+                alphabet.Append(alphabet[0]);
+                alphabet.Remove(0, 1);
+            }
+            
+        }
 
-    //    public string decryptMessage(string encryptedMessage)
-    //    {
-    //        // The implementation of decryption of Cipher A.
+        private void InitDictionary()
+        {
+            int i = 1;
+            foreach (var letter in alphabet.ToString())
+            {
+                letterIndexes.Add(letter, i++);
+            }
+        }
 
-    //        return "";
-    //    }
-    //}
+        public void PrintMatrix()
+        {
+            for (int i = 0; i < vigenereTable.GetLength(0); i++)
+            {
+                for (int j = 0; j < vigenereTable.GetLength(1); j++)
+                {
+                    Console.Write($"{vigenereTable[i, j]} ");
+                }
+
+                Console.WriteLine();
+            }
+        }
+
+        public string encryptMessage(char[] message)
+        {
+            var input = TextManipulation.RemoveSpecialCharacters((new string(message)).ToUpper());
+            matchKeyword(input);
+            string result = GenerateEncryptedMessage(input);
+            return result;
+        }
+
+        public string decryptMessage(char[] encryptedMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void matchKeyword(string input)
+        {
+            Console.WriteLine(input);
+            int keywordIndex = 0;
+            var tempMessage = new StringBuilder();
+
+            foreach (var _ in input)
+            {
+                if (keywordIndex == Keyword.Length) keywordIndex = 0;
+                tempMessage.Append(Keyword[keywordIndex++]);
+            }
+
+            KeywordMessage = tempMessage.ToString();
+        }
+
+        private string GenerateEncryptedMessage(string input)
+        {
+            var word = new StringBuilder(input);
+            //match letters of Keyword with plaintext to generate encrypted message
+            for (int i = 0; i < word.Length; i++)
+            {
+                var keywordLetter = KeywordMessage[i];
+                var messageLetter = word[i];
+                int indexRow = letterIndexes[keywordLetter] - 1;
+                int indexColumn = letterIndexes[messageLetter] - 1;
+                word[i] = vigenereTable[indexRow, indexColumn];
+            }
+
+            return word.ToString();
+        }
+    }
 }

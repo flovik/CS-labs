@@ -12,10 +12,12 @@ namespace SymmetricCiphers.BlockCipher
     public class BlockCipher : ICipher
     {
         private readonly InitialPermutation _initialPermutation;
+        private readonly KeyGenerator _keyGenerator;
 
-        public BlockCipher()
+        public BlockCipher(string key)
         {
             _initialPermutation = new InitialPermutation();
+            _keyGenerator = new KeyGenerator(key);
         }
 
         public string Encrypt(string plaintext)
@@ -36,7 +38,12 @@ namespace SymmetricCiphers.BlockCipher
             {
                 //Initial Permutation
                 (string leftPlainText, string rightPlainText) = _initialPermutation.Permutation(block);
-
+                
+                //
+                for (int i = 0; i < 16; i++)
+                {
+                    
+                }
             }
 
             return result;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SymmetricCiphers.BlockCipher.Helpers.Utils;
 
 namespace SymmetricCiphers.BlockCipher.Helpers
 {
@@ -24,17 +25,7 @@ namespace SymmetricCiphers.BlockCipher.Helpers
             //transform the block of 8 bytes into 64 bits
             var binaryString = ToBinary(ConvertToByteArray(block));
             binaryString = ChangeBits(binaryString);
-            return (binaryString[..32], binaryString[32..^1]);
-        }
-
-        private byte[] ConvertToByteArray(string str)
-        {
-            return Encoding.ASCII.GetBytes(str);
-        }
-
-        private string ToBinary(byte[] data)
-        {
-            return string.Join("", data.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
+            return (binaryString[..32], binaryString[32..]);
         }
 
         private string ChangeBits(string binaryString)
@@ -50,8 +41,6 @@ namespace SymmetricCiphers.BlockCipher.Helpers
 
             return result;
         }
-
-
 
         /*
         in initial permutation makes transposition of bits. 58th bit replaces the 1st bit, 50th bit replaces the 2nd etc

@@ -18,7 +18,8 @@
 using SymmetricCiphers.BlockCipher;
 
 var text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\message.txt");
+var key = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\key.txt");
 
 Console.WriteLine($"Message to be encrypted: {text}");
-var blockCipher = new BlockCipher();
+var blockCipher = new BlockCipher(key);
 blockCipher.Encrypt(text);

@@ -8,7 +8,7 @@ namespace SymmetricCiphers.BlockCipher.Interfaces
 {
     public interface ICipher
     {
-        string Encrypt(string plaintext);
-        string Decrypt(string ciphertext);
+        List<string> Encrypt(string plaintext);
+        List<string> Decrypt(string ciphertext);
     }
 }

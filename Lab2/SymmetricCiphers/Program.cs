@@ -16,10 +16,16 @@
 //implement different character length text by padding it - in utils class
 
 using SymmetricCiphers.BlockCipher;
+using System.Text;
 
+Console.OutputEncoding = Encoding.Unicode;
 var text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\message.txt");
 var key = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\key.txt");
 
 Console.WriteLine($"Message to be encrypted: {text}");
 var blockCipher = new BlockCipher(key);
-blockCipher.Encrypt(text);
+var blocks = blockCipher.Encrypt(text);
+foreach (var block in blocks)
+{
+    Console.WriteLine(block + ' ');
+}

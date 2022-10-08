@@ -24,22 +24,8 @@ namespace SymmetricCiphers.BlockCipher.Helpers
         {
             //transform the block of 8 bytes into 64 bits
             var binaryString = ToBinary(ConvertToByteArray(block));
-            binaryString = ChangeBits(binaryString);
+            binaryString = ChangeBits(binaryString, Matrix);
             return (binaryString[..32], binaryString[32..]);
-        }
-
-        private string ChangeBits(string binaryString)
-        {
-            var result = string.Empty;
-            for (int i = 0; i < Matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < Matrix.GetLength(0); j++)
-                {
-                    result += binaryString[Matrix[i, j] - 1];
-                }
-            }
-
-            return result;
         }
 
         /*

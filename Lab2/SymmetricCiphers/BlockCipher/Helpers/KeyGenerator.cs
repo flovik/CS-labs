@@ -57,31 +57,19 @@ namespace SymmetricCiphers.BlockCipher.Helpers
             //for 16 rounds we need a new key
             for (int i = 0; i < 16; i++)
             {
-                left = ShiftBy(left, ShiftRounds[i]);
-                right = ShiftBy(right, ShiftRounds[i]);
+                left = ShiftLeftBy(left, ShiftRounds[i]);
+                right = ShiftLeftBy(right, ShiftRounds[i]);
                 var key = left + right;
                 var newKey = ChangeBits(key, KeyMatrix2);
                 KeyList.Add(newKey);
             }
         }
 
-        private string ShiftBy(string key, int shift)
+        private string ShiftLeftBy(string key, int shift)
         {
-            return key[^shift..] + key[..^shift];
-        }
-
-        private string ChangeBits(string binaryString, int[,] matrix)
-        {
-            var result = string.Empty;
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    result += binaryString[matrix[i, j] - 1];
-                }
-            }
-
-            return result;
+            string leftSide = key[..shift];
+            string rightSide = key[shift..];
+            return rightSide + leftSide;
         }
     }
 }

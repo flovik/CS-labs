@@ -24,11 +24,8 @@ namespace SymmetricCiphers.BlockCipher
             _keyGenerator = new KeyGenerator(key);
         }
 
-        public List<string> Encrypt(string plaintext)
+        public List<string> Encrypt(string plaintext, int encrypt = 0)
         {
-            //char is 1 byte long, so we encrypt/decrypt 8 bytes at a time (64 bits blocks)
-            var result = new List<string>();
-
             //split text into block of 8
             var blockText = plaintext.SplitInto(8).ToList();
 
@@ -39,6 +36,32 @@ namespace SymmetricCiphers.BlockCipher
                 var padLength = 8 - (blockText.Last().Length % 8);
                 blockText[^1] = blockText[^1].PadRight(8, Convert.ToChar(padLength));
             }
+
+            for (int i = 0; i < blockText.Count; i++)
+            {
+                //transform the block of 8 bytes into 64 bits
+                blockText[i] = ToBinary(ConvertToByteArray(blockText[i]));
+            }
+            
+            blockText = RunEncryption(blockText, encrypt);
+            return blockText;
+        }
+
+        public List<string> Decrypt(List<string> ciphertext)
+        {
+            for (int i = 0; i < ciphertext.Count; i++)
+            {
+                ciphertext[i] = HexStringToBinary(ciphertext[i]);
+            }
+
+            ciphertext = RunEncryption(ciphertext, 15);
+            return ciphertext;
+        }
+
+        private List<string> RunEncryption(List<string> blockText, int encrypt = 0)
+        {
+            //char is 1 byte long, so we encrypt/decrypt 8 bytes at a time (64 bits blocks)
+            var result = new List<string>();
 
             foreach (var block in blockText)
             {
@@ -51,9 +74,9 @@ namespace SymmetricCiphers.BlockCipher
                 {
                     //expand rightPlainText to match 48bit key
                     var rightPlainTextExpanded = _round.ExpandBlock(rightPlainText);
-                    
+
                     //xor with a key
-                    var xor = _round.Xor(rightPlainTextExpanded, _keyGenerator.KeyList[i]);
+                    var xor = _round.Xor(rightPlainTextExpanded, _keyGenerator.KeyList[Math.Abs(i - encrypt)]);
 
                     //SBox substitution
                     temp = _sBoxSubstitution.Permute(xor);
@@ -68,24 +91,16 @@ namespace SymmetricCiphers.BlockCipher
                     leftPlainText = rightPlainText;
                     rightPlainText = xor;
                 }
-                
+
                 result.Add(_finalPermutation.Permute(rightPlainText + leftPlainText));
             }
 
-            //var returnResult = result.Aggregate(string.Empty, (current, block) => current + block);
-            //Console.WriteLine(returnResult);
-            //return StringBitsToString(returnResult);
             for (int i = 0; i < result.Count; i++)
             {
                 result[i] = BinaryStringToHexString(result[i]);
             }
 
             return result;
-        }
-
-        public List<string> Decrypt(string ciphertext)
-        {
-            throw new NotImplementedException();
         }
     }
 }

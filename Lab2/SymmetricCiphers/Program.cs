@@ -17,6 +17,7 @@
 
 using SymmetricCiphers.BlockCipher;
 using System.Text;
+using static SymmetricCiphers.BlockCipher.Helpers.Utils;
 
 Console.OutputEncoding = Encoding.Unicode;
 var text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\message.txt");
@@ -29,3 +30,14 @@ foreach (var block in blocks)
 {
     Console.WriteLine(block + ' ');
 }
+
+Console.WriteLine();
+
+blocks = blockCipher.Decrypt(blocks);
+for (int i = 0; i < blocks.Count; i++)
+{
+    Console.WriteLine(blocks[i]);
+}
+
+//used that site to check myself, ECB, PKCS7, secrtkey
+//https://the-x.cn/en-US/cryptography/Des.aspx

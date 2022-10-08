@@ -20,10 +20,8 @@ namespace SymmetricCiphers.BlockCipher.Helpers
             { 63, 55, 47, 39, 31, 23, 15, 7 }
         };
 
-        public (string, string) Permutation(string block)
+        public (string, string) Permutation(string binaryString)
         {
-            //transform the block of 8 bytes into 64 bits
-            var binaryString = ToBinary(ConvertToByteArray(block));
             binaryString = ChangeBits(binaryString, Matrix);
             return (binaryString[..32], binaryString[32..]);
         }

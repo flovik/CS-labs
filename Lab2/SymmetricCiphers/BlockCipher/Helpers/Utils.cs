@@ -33,17 +33,6 @@ namespace SymmetricCiphers.BlockCipher.Helpers
             return result;
         }
 
-        public static string StringBitsToString(string bits)
-        {
-            var bytes = new List<byte>();
-
-            for (int i = 0; i < bits.Length; i += 8)
-            {
-                bytes.Add(Convert.ToByte(bits.Substring(i, 8), 2));
-            }
-            return Encoding.UTF8.GetString(bytes.ToArray());
-        }
-
         public static string BinaryStringToHexString(string binary)
         {
             if (string.IsNullOrEmpty(binary))
@@ -65,6 +54,15 @@ namespace SymmetricCiphers.BlockCipher.Helpers
             }
 
             return result.ToString();
+        }
+
+        public static string HexStringToBinary(string hex)
+        {
+            return string.Join(string.Empty,
+                hex.Select(
+                    c => Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2).PadLeft(4, '0')
+                )
+            );
         }
     }
 }

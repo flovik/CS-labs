@@ -17,6 +17,7 @@
 
 using SymmetricCiphers.BlockCipher;
 using System.Text;
+using SymmetricCiphers.StreamCipher;
 using static SymmetricCiphers.BlockCipher.Helpers.Utils;
 
 Console.OutputEncoding = Encoding.Unicode;
@@ -41,3 +42,6 @@ for (int i = 0; i < blocks.Count; i++)
 
 //used that site to check myself, ECB, PKCS7, secrtkey
 //https://the-x.cn/en-US/cryptography/Des.aspx
+
+Console.WriteLine($"Message to be encrypted: {text}");
+var streamCipher = new StreamCipher();

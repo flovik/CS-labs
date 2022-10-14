@@ -41,12 +41,51 @@ namespace SymmetricCiphers.StreamCipher
             //bits of the 64 bit session key are consecutively XORed in parallel with the feedback
             //of the register
             Lfsr1.Xor(SessionKey);
-            Lfsr2.Xor(sessionKey);
-            Lfsr3.Xor(sessionKey);
+            Lfsr2.Xor(SessionKey);
+            Lfsr3.Xor(SessionKey);
+
+            //Step 3 - do the same thing in register for Frame key
+            Lfsr1.Xor(FrameKey);
+            Lfsr2.Xor(FrameKey);
+            Lfsr3.Xor(FrameKey);
+
+            //Step 4 - registers are clocked 100 times with irregular clocking
+            //follows the majority rule. Majority bit is determined based on clocking bits of the registers. 
+            //If the clocking bit of register is same as majority bit, the register is clocked
+            //take each LFSR, at the clocking bit calculate if there are more 0s or 1s, if we have 2 zeros and 1 ones, 
+            //the LFSRs with zero are clocked, the one with one stays unchanged
+            for (int i = 0; i < 100; i++)
+            {
+                var bit = MajorityVote();
+                if (Lfsr1.Key[Lfsr1.ClockingBit] == bit)
+                {
+                    Lfsr1.MajorityVote();
+                }
+                if (Lfsr2.Key[Lfsr2.ClockingBit] == bit)
+                {
+                    Lfsr2.MajorityVote();
+                }
+                if (Lfsr3.Key[Lfsr3.ClockingBit] == bit)
+                {
+                    Lfsr3.MajorityVote();
+                }
+            }
 
 
         }
 
+        private char MajorityVote()
+        {
+            var clockingBits = new List<char>
+            {
+                Lfsr1.Key[Lfsr1.ClockingBit],
+                Lfsr2.Key[Lfsr2.ClockingBit],
+                Lfsr3.Key[Lfsr3.ClockingBit],
+            };
+
+            var zeros = clockingBits.Count(c => c == '0');
+            return zeros > 1 ? '0' : '1';
+        }
 
 
         public string Encrypt(string plaintext)

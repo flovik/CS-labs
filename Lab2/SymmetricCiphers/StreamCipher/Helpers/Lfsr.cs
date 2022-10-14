@@ -35,8 +35,14 @@ namespace SymmetricCiphers.StreamCipher.Helpers
                 var finalBit = FinalXor(bit, lfsrBit);
                 //shift string
                 ShiftRight(finalBit);
-                Console.WriteLine(Key);
+                //Console.WriteLine(Key);
             }
+        }
+
+        public void MajorityVote()
+        {
+            var lfsrBit = TappedBitsXor(Key[TappedBits[^1]], TappedBits.Count - 2);
+            ShiftRight(lfsrBit);
         }
 
         private char FinalXor(char leftBit, char rightBit)

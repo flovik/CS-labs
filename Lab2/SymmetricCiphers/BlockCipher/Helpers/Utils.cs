@@ -64,5 +64,10 @@ namespace SymmetricCiphers.BlockCipher.Helpers
                 )
             );
         }
+
+        public static char Xor(char leftBit, char rightBit)
+        {
+            return leftBit == rightBit ? '0' : '1';
+        }
     }
 }

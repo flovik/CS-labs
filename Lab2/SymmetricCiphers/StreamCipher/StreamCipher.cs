@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SymmetricCiphers.BlockCipher.Helpers;
 using SymmetricCiphers.BlockCipher.Interfaces;
 using SymmetricCiphers.StreamCipher.Helpers;
 using SymmetricCiphers.StreamCipher.Interfaces;
@@ -17,6 +18,7 @@ namespace SymmetricCiphers.StreamCipher
         private readonly Lfsr Lfsr3;
         private string SessionKey { get; set; }
         private string FrameKey { get; set; }
+        private StringBuilder KeyStream { get; set; } = new();
 
         public StreamCipher(string sessionKey)
         {
@@ -70,6 +72,31 @@ namespace SymmetricCiphers.StreamCipher
                     Lfsr3.MajorityVote();
                 }
             }
+
+            //Step 5 - clocking registers as in step 4, but not take last bit of LSFRs keys, XOR them and append to Key Stream
+            for (int i = 0; i < 228; i++)
+            {
+                var keyStreamChar = Utils.Xor(Lfsr1.Key[^1], Lfsr2.Key[^1]);
+                keyStreamChar = Utils.Xor(keyStreamChar, Lfsr3.Key[^1]);
+                KeyStream.Append(keyStreamChar);
+
+                //same thing as in step 4
+                var bit = MajorityVote();
+                if (Lfsr1.Key[Lfsr1.ClockingBit] == bit)
+                {
+                    Lfsr1.MajorityVote();
+                }
+                if (Lfsr2.Key[Lfsr2.ClockingBit] == bit)
+                {
+                    Lfsr2.MajorityVote();
+                }
+                if (Lfsr3.Key[Lfsr3.ClockingBit] == bit)
+                {
+                    Lfsr3.MajorityVote();
+                }
+            }
+
+            
 
 
         }

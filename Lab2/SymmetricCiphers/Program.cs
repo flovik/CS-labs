@@ -45,3 +45,12 @@ var key = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCipher
 
 Console.WriteLine($"Message to be encrypted: {text}");
 var streamCipher = new StreamCipher(key);
+var cipherText = streamCipher.Encrypt(text);
+Console.WriteLine(cipherText);
+
+var decryptedText = streamCipher.Decrypt(cipherText);
+Console.WriteLine(decryptedText);
+
+
+//used that site to check hex values results
+//https://codebeautify.org/hex-string-converter

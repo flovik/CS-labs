@@ -95,10 +95,6 @@ namespace SymmetricCiphers.StreamCipher
                     Lfsr3.MajorityVote();
                 }
             }
-
-            
-
-
         }
 
         private char MajorityVote()
@@ -117,12 +113,28 @@ namespace SymmetricCiphers.StreamCipher
 
         public string Encrypt(string plaintext)
         {
-            throw new NotImplementedException();
+            var binaryText = ToBinary(ConvertToByteArray(plaintext));
+            return Encryption(binaryText);
         }
 
         public string Decrypt(string ciphertext)
         {
-            throw new NotImplementedException();
+            var binaryText = Utils.HexStringToBinary(ciphertext);
+            return Encryption(binaryText);
+        }
+
+        public string Encryption(string binaryText)
+        {
+            var result = string.Empty;
+            for (int i = 0, streamKeyIndex = 0; i < binaryText.Length; i++, streamKeyIndex++)
+            {
+                //when streamKey is exhausted, go to the beginning of it
+                if (streamKeyIndex == 228) streamKeyIndex = 0;
+                //perform KeyStream XOR PlainText bit
+                result += Utils.Xor(KeyStream[streamKeyIndex], binaryText[i]);
+            }
+
+            return Utils.BinaryStringToHexString(result);
         }
     }
 }

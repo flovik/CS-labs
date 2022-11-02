@@ -9,9 +9,9 @@ IRsaCipher rsa = new RsaCipher();
 var encrypted = rsa.Encrypt(text);
 
 Console.WriteLine("Encrypted text (in hex): ");
-foreach (var block in encrypted)
+for (int i = 0; i < encrypted.Length; i += 8)
 {
-    Console.Write(block + " ");
+    Console.Write($"{encrypted.Substring(i, 8)} ");
 }
 
 Console.WriteLine();

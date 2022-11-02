@@ -5,15 +5,15 @@ namespace RSA.RsaCipher.Helpers;
 
 public static class Utils
 {
-    public static List<string> IntToHexList(int[] plainTextBits)
+    public static string IntToHexList(int[] plainTextBits)
     {
-        var sb = new List<string>(plainTextBits.Length);
+        var sb = new StringBuilder();
         foreach (var plainTextBit in plainTextBits)
         {
-            sb.Add(plainTextBit.ToString("X"));
+            sb.Append(plainTextBit.ToString("x8"));
         }
 
-        return sb;
+        return sb.ToString();
     }
 
     public static int[] StringToInts(string input)
@@ -37,12 +37,18 @@ public static class Utils
         return sb.ToString();
     }
 
-    public static int[] HexToInts(List<string> hexString)
+    public static int[] HexToInts(string hexString)
     {
-        int[] result = new int[hexString.Count];
-        for (int i = 0; i < hexString.Count; i++)
+        var list = new List<string>();
+        for (int i = 0; i < hexString.Length; i += 8)
         {
-            result[i] = int.Parse(hexString[i], System.Globalization.NumberStyles.HexNumber);
+            list.Add(hexString.Substring(i, 8));
+        }
+
+        int[] result = new int[list.Count];
+        for (int i = 0; i < list.Count; i++)
+        {
+            result[i] = int.Parse(list[i], System.Globalization.NumberStyles.HexNumber);
         }
 
         return result;

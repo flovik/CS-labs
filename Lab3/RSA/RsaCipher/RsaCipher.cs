@@ -18,7 +18,7 @@ public class RsaCipher : IRsaCipher
         PublicKey = KeyGenerator.GeneratePublicKey();
     }
 
-    public List<string> Encrypt(string plaintext)
+    public string Encrypt(string plaintext)
     {
         //get ascii representation for each character in plaintext
         var plainTextInts = StringToInts(plaintext);
@@ -28,7 +28,7 @@ public class RsaCipher : IRsaCipher
         return IntToHexList(encryptedInts);
     }
 
-    public string Decrypt(List<string> ciphertext)
+    public string Decrypt(string ciphertext)
     {
         //convert hex values to int
         var encryptedInts = HexToInts(ciphertext);

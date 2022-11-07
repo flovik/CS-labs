@@ -17,15 +17,17 @@
 
 using SymmetricCiphers.BlockCipher;
 using System.Text;
+using SymmetricCiphers.BlockCipher.Interfaces;
 using SymmetricCiphers.StreamCipher;
+using SymmetricCiphers.StreamCipher.Interfaces;
 using static SymmetricCiphers.BlockCipher.Helpers.Utils;
 
 Console.OutputEncoding = Encoding.Unicode;
-var text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\message.txt");
-var key = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\key.txt");
+var text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\Text\message.txt");
+var key = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCiphers\Text\key.txt");
 
 //Console.WriteLine($"Message to be encrypted: {text}");
-//var blockCipher = new BlockCipher(key);
+//ICipher blockCipher = new BlockCipher(key);
 //var blocks = blockCipher.Encrypt(text);
 //foreach (var block in blocks)
 //{
@@ -44,7 +46,7 @@ var key = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab2\SymmetricCipher
 //https://the-x.cn/en-US/cryptography/Des.aspx
 
 Console.WriteLine($"Message to be encrypted: {text}");
-var streamCipher = new StreamCipher(key);
+IStreamCipher streamCipher = new StreamCipher(key);
 var cipherText = streamCipher.Encrypt(text);
 Console.WriteLine(cipherText);
 

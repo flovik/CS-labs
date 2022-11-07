@@ -3,7 +3,7 @@ using RSA.RsaCipher;
 using RSA.RsaCipher.Interfaces;
 
 Console.OutputEncoding = Encoding.Unicode;
-string text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab3\RSA\message.txt");
+string text = File.ReadAllText(@"C:\Personal testing\CS\CS-labs\Lab3\RSA\Message\message.txt");
 Console.WriteLine($"Text to be encrypted: {text}");
 IRsaCipher rsa = new RsaCipher();
 var encrypted = rsa.Encrypt(text);

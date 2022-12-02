@@ -58,14 +58,14 @@ The signature is used to verify the message wasn't changed along the way, and, i
 I had to [configure](#Configuration) my API to work with JWT Tokens and added some registered claims (issuer, audience, signing key). 
 
 &ensp;&ensp;&ensp; When a user tries to log in (authenticate), he inserts his credentials (mail, password) which are checked in the database. If credentials are correct,
-a new token is generated with the [Jwt service](#JwtService.GenerateToken) which is built using the registered claims and public claims of user (which are [generated](#JwtService.GenerateClaims)). 
+a new token is generated with the [Jwt service](#GenerateToken) which is built using the registered claims and public claims of user (which are [generated](#GenerateClaims)). 
 Added claims are the email of the user, his unique identifier and his role. Everything is packed in a JWT token, encoded with HmacSha256 symmetric encryption algorithm and 
 returned to the end-user. 
 
 &ensp;&ensp;&ensp; After a successful login, I get a JWT token in the response body that I can use to make requests that require authorization. I attached a 
 screenshot of a decoded token. Now I can make requests to some API endpoint's that are protected with the [Authorize] attribute. If I try to access them, I will get 
-a Http 401 Unauthorized error. Now I can access authorized endpoints, but only specific to my own role as [Common get](#UsersController.CommonGet) has, but I cannot access 
-[Admin get](#UsersController.AdminGet), because it is protected with the role "admin" which me as a user I do not possess. If I try to access it, I will get a Http 403 Forbidden
+a Http 401 Unauthorized error. Now I can access authorized endpoints, but only specific to my own role as [Common get](#CommonGet) has, but I cannot access 
+[Admin get](#AdminGet), because it is protected with the role "admin" which me as a user I do not possess. If I try to access it, I will get a Http 403 Forbidden
 error. 'User' role is less priviled than 'admin' role, so in such a manner we can restrict which endpoints of the API a user can access.
 
 # Configuration
@@ -87,7 +87,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 ```
 
-# JwtService.GenerateToken
+# GenerateToken
 ```
 var claims = GenerateClaims(user);
 var token = new JwtSecurityToken(
@@ -104,7 +104,7 @@ var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
 return encodedToken;
 ```
 
-# JwtService.GenerateClaims
+# GenerateClaims
 ```
 var claims = new List<Claim>
 {
@@ -116,7 +116,7 @@ var claims = new List<Claim>
 return claims;
 ```
 
-# UsersController.AdminGet
+# AdminGet
 ```
 [Route("all")]
 [Authorize(Roles = "admin")]
@@ -127,7 +127,7 @@ public IActionResult GetAll()
 }
 ```
 
-# UsersController.CommonGet
+# CommonGet
 ```
 [HttpGet]
 public IActionResult Get()
